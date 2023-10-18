@@ -4,7 +4,7 @@ if directionIn == 0
         direction = randi([1,4]);
     else
         direction = directionIn;
-    end
+end
     
     smery = [0,-1,1];
     smery(2:3) = smery(randperm(2)+1);
@@ -38,7 +38,7 @@ end
 
 function value = ohodnot(map, pos,s)
     if (volno(map, pos))
-        M = matice_zajmu(map,pos,s,4);
+        M = matice_zajmu(map,pos,s,6);
         jidlo = sum(M==2);
         zed = sum(M == 1);
         had = sum(M > 2);

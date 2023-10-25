@@ -1,4 +1,4 @@
-function dalsi_tah = AIMarek(board, playerID)
+function dalsi_tah = AIZkouska(board, playerID)
 
     moje_ID = playerID;
     soupere_ID = GameBoard.GetOponent(moje_ID);

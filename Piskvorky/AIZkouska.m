@@ -16,7 +16,7 @@ function dalsi_tah = AIZkouska(board, playerID)
             
             
             for smer_nepritele = 1:4
-                nepritel_kamenu = nepritel_kamenu + GameBoard.CountStonesInDir(board, [pozice, i], smer_nepritele, soupere_ID);
+                nepritel_kamenu = nepritel_kamenu + 3*GameBoard.CountStonesInDir(board, [pozice, i], smer_nepritele, soupere_ID);
             end
             
             
@@ -35,27 +35,49 @@ function dalsi_tah = AIZkouska(board, playerID)
     
     [souper_max, max_id] = max(nepritelovy_pozice);
     
-    if souper_max > 1
-        if souper_max <= 2
-            tah = mod(max_id + 2, 7) + 1; % Zkrácení podmínek
+    if souper_max > 2
+        if souper_max <= 4
+            tah = (max_id < 4) * (max_id + 1) + (max_id >= 4) * (max_id - 1);
+
         else
             tah = max_id;
         end
+        
     else
         [maxv, maxid] = max(mozne_pozice);
-        tah = (maxv == 0) * 4 + (maxv ~= 0) * maxid; % Zkrácení podmínek
+        tah = (maxv == 0) * 4 + (maxv ~= 0) * maxid; 
     end
     
     tah = overeni_dostupnosti(tah, board);
+    [vhodna, prohra] = overeni_neprohry(soupere_ID,tah,board);
+    if prohra
+        dalsi_tah = vhodna;
+    else
+        dalsi_tah = tah;
+    end
 
-    dalsi_tah = tah;
+    
+end
+
+function [vhodna, prohra] = overeni_neprohry(id,tah,board)
+    for i = 1:7
+        if GameBoard.ColIsFree(i, board)
+            [x, tah] = SimulatePlaceStone(id,tah,board);
+            prohra = CheckFours(board,tah);
+            if prohra
+                vhodna = tah;
+            end
+        end
+    end
+
+    
 end
 
 function novyTah = overeni_dostupnosti(tah, board)
     if ~GameBoard.ColIsFree(tah, board)
-        tah = mod(tah, 7) + 1; % Zkrácení podmínek
-        novyTah = overeni_dostupnosti(tah, board); % Rekurzivní volání
+        tah = mod(tah, 7) + 1; 
+        novyTah = overeni_dostupnosti(tah, board); 
     else
-        novyTah = tah; % Ukončení rekurze, vrátí aktuální tah
+        novyTah = tah; 
     end
 end

@@ -37,13 +37,14 @@ function dalsi_tah = AIMarek(board, playerID)
     
     if souper_max > 1
         if souper_max <= 2
-            tah = mod(max_id + 2, 7) + 1; % Zkrácení podmínek
+            tah = (max_id < 4) * (max_id + 1) + (max_id >= 4) * (max_id - 1);
+
         else
             tah = max_id;
         end
     else
         [maxv, maxid] = max(mozne_pozice);
-        tah = (maxv == 0) * 4 + (maxv ~= 0) * maxid; % Zkrácení podmínek
+        tah = (maxv == 0) * 4 + (maxv ~= 0) * maxid; 
     end
     
     tah = overeni_dostupnosti(tah, board);
@@ -53,9 +54,9 @@ end
 
 function novyTah = overeni_dostupnosti(tah, board)
     if ~GameBoard.ColIsFree(tah, board)
-        tah = mod(tah, 7) + 1; % Zkrácení podmínek
-        novyTah = overeni_dostupnosti(tah, board); % Rekurzivní volání
+        tah = mod(tah, 7) + 1; 
+        novyTah = overeni_dostupnosti(tah, board); 
     else
-        novyTah = tah; % Ukončení rekurze, vrátí aktuální tah
+        novyTah = tah; 
     end
 end

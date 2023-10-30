@@ -1,18 +1,18 @@
 clear
 
 hrac = [Player('Radim',@AIMinMax),...
-    Player('Davids',@AIdavids),...
+    Player('Davids',@AIMarek),...
     Player('Patrik',@AIPatrik),...
     Player('Marek',@AIZkouska),...
     Player('Naive',@AINaive),...
     Player('Jan',@AIjan)];
 
 disp("start")
-ids = [1,4];
+ids = [2,5];
 res = zeros([1 2]);
 % stridat startovaci hrace
 % vyresit remizu
-for k = 1:20    
+for k = 1:20   
     h = play(hrac(ids));
     res(h) = res(h) + 1 ;
 end

@@ -1,7 +1,30 @@
 function dalsi_tah = AIZkouska(board, playerID)
+    hloubka = 4;
+    tah = 0;
+    dalsi_tah = Minimax(board,playerID,hloubka,tah);
+            
+end
+function dalsi_tah = Minimax(board,playerID,hloubka,tah)
+    if hloubka <= 0
+        dalsi_tah = tah(2);    
+    else
+        tah = zakladni_hra(board,playerID);
+        [nova_deska, tah] = GameBoard.SimulatePlaceStone(playerID,tah,board);
+        for i = 1:7
+            if GameBoard.ColIsFree(i,nova_deska)
+                hloubka = hloubka -1;
+                dalsi_tah = Minimax(nova_deska,playerID,hloubka,tah);
+            else
+                dalsi_tah = tah;
+            end
+        end
+    end
+end
 
+function dalsi_tah = zakladni_hra(board,playerID)
     moje_ID = playerID;
     soupere_ID = GameBoard.GetOponent(moje_ID);
+    
     
     hraci_moje = zeros(6,1);
     hraci_soupere = zeros(6,1);
@@ -49,28 +72,46 @@ function dalsi_tah = AIZkouska(board, playerID)
     end
     
     tah = overeni_dostupnosti(tah, board);
-    [vhodna, prohra] = overeni_neprohry(soupere_ID,tah,board);
-    if prohra
+    [zamezeni, prohra] = overeni_neprohry(soupere_ID,board);
+    [vhodna, vyhra] = overeni_vyhry(moje_ID,board);
+
+    if vyhra
         dalsi_tah = vhodna;
+    elseif prohra
+        dalsi_tah = zamezeni;
     else
         dalsi_tah = tah;
     end
 
-    
 end
 
-function [vhodna, prohra] = overeni_neprohry(id,tah,board)
+function [vhodna, vyhra] = overeni_vyhry(id,board)
+    vhodna = 0;
     for i = 1:7
         if GameBoard.ColIsFree(i, board)
-            [x, tah] = SimulatePlaceStone(id,tah,board);
-            prohra = CheckFours(board,tah);
-            if prohra
-                vhodna = tah;
+            [x, tah] = GameBoard.SimulatePlaceStone(id,i,board);
+            vyhra = GameBoard.CheckFours(x,tah);
+            if vyhra
+                vhodna = i;
+                break;
             end
         end
     end
+end
 
-    
+function [vhodna, prohra] = overeni_neprohry(id,board)
+    vhodna = 0;
+    for i = 1:7
+        
+        if GameBoard.ColIsFree(i, board)
+            [x, tah] = GameBoard.SimulatePlaceStone(id,i,board);
+            prohra = GameBoard.CheckFours(x,tah);
+            if prohra
+                vhodna = i;
+                break;
+            end
+        end
+    end  
 end
 
 function novyTah = overeni_dostupnosti(tah, board)

@@ -1,7 +1,7 @@
 clear
 close all
-addpath 'pca_ica';
-addpath 'faces_cislo';
+
+
 D_train = dir('faces_cislo/*.jpg');
 
 M_train = [];
@@ -24,8 +24,11 @@ coef_train = pca(MStd_train);
 % Vytvoření prostoru hlavních komponent pro trénovací data
 train_space = MStd_train * coef_train;
 
-% Načtení testovacích dat
+% Rozdělení trénovacích obličejů do skupin (např. 1-10, 11-20, ...)
+num_groups = length(D_train)/10;
+group_indices = ceil((1:length(D_train)) / (length(D_train) / num_groups));
 
+% Načtení testovacích dat
 addpath 'faces-test';
 D_test = dir('faces-test/*.jpg');
 
@@ -50,11 +53,9 @@ test_space = MStd_test * coef_train;
 train_space_norm = (train_space - mean(train_space(:))) / std(train_space(:));
 test_space_norm = (test_space - mean(test_space(:))) / std(test_space(:));
 
-
-
 % Natrénování k-NN klasifikátoru
-knnClassifier = fitcknn(train_space_norm, (1:length(D_train))', 'NumNeighbors', 1);
-predictedClasses = predict(knnClassifier, test_space_norm);
+knnClassifier = fitcknn(train_space_norm, group_indices', 'NumNeighbors', 10);
+predictedGroups = predict(knnClassifier, test_space_norm);
 
 figure('Name','knn')
 
@@ -66,13 +67,12 @@ for i = 1:length(D_test)
     
     j = j + 1;
     subplot(4, 2, j)
-    indx = predictedClasses(i);
+    predictedGroup = predictedGroups(i);
+    % Zobrazit nějaký obličej z přiřazené skupiny
+    indx = find(group_indices == predictedGroup, 1, 'first');
     prvotni_obrazek = fullfile('faces_cislo', [num2str(indx) '.jpg']);
     imshow(prvotni_obrazek)
     j = j + 1;
     
-    % Zobrazit nejbližší trénovací obličej
-    title(['Testovací obličej ' num2str(i) ' nejbližší trénovacímu obličeji ' num2str(indx)])
+    title(['Testovací obličej ' num2str(i) ' patří do skupiny ' num2str(predictedGroup)])
 end
-
-

@@ -1,6 +1,5 @@
-% Načtení trénovacích dat
 clear
-close all
+
 addpath 'pca_ica';
 addpath 'faces_cislo';
 D_train = dir('faces_cislo/*.jpg');
@@ -51,41 +50,15 @@ test_space = MStd_test * coef_train;
 train_space_norm = (train_space - mean(train_space(:))) / std(train_space(:));
 test_space_norm = (test_space - mean(test_space(:))) / std(test_space(:));
 
-% Porovnání vzdáleností mezi testovacími a trénovacími obličeji
-distances = pdist2(test_space_norm, train_space_norm);
 
-% Najít nejbližší obličej pro každý testovací obličej
-[~, idx] = min(distances, [], 2);
-
-% Vykreslení výsledků
-figure('Name','vzdálenost')
-
-
-j = 1;
-for i = 1:length(D_test)
-    subplot(4, 2, j)
-    testovaci_obrazek = fullfile('faces-test', [num2str(i) '.jpg']);
-    imshow(testovaci_obrazek)
-    
-    j = j + 1;
-    subplot(4, 2, j)
-    indx = idx(i);
-    prvotni_obrazek = fullfile('faces_cislo', [num2str(indx) '.jpg']);
-    imshow(prvotni_obrazek)
-    j = j + 1;
-
-    % Zobrazit nejbližší trénovací obličej
-    title(['Testovací obličej ' num2str(i) ' nejbližší trénovacímu obličeji ' num2str(indx)])
-
-end
 
 
 
 % Natrénování k-NN klasifikátoru
-knnClassifier = fitcknn(train_space_norm, (1:length(D_train))', 'NumNeighbors', 10);
+knnClassifier = fitcknn(train_space_norm, (1:length(D_train))', 'NumNeighbors', 1);
 predictedClasses = predict(knnClassifier, test_space_norm);
 
-figure('Name','knn')
+figure('Name','knn_konkretni')
 
 j = 1;
 for i = 1:length(D_test)
@@ -103,4 +76,3 @@ for i = 1:length(D_test)
     % Zobrazit nejbližší trénovací obličej
     title(['Testovací obličej ' num2str(i) ' nejbližší trénovacímu obličeji ' num2str(indx)])
 end
-

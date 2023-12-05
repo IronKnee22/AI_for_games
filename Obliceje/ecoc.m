@@ -1,6 +1,6 @@
+% Načtení trénovacích dat
 clear
-close all
-addpath 'pca_ica';
+
 addpath 'faces_cislo';
 D_train = dir('faces_cislo/*.jpg');
 
@@ -8,7 +8,7 @@ M_train = [];
 [~, reindex] = sort(str2double(regexp({D_train.name}, '\d+', 'match', 'once')));
 D_train = D_train(reindex);
 for ID = 1:length(D_train)
-    D_train(ID).name;
+    D_train(ID).name
     im = rgb2gray(imread(D_train(ID).name)); % obličeje do šeda
     M_train = cat(2, M_train, im(:));   % dání obličejů do jedné matice
 end
@@ -26,6 +26,9 @@ train_space = MStd_train * coef_train;
 
 % Načtení testovacích dat
 
+num_groups = length(D_train)/10;
+group_indices = ceil((1:length(D_train)) / (length(D_train) / num_groups));
+
 addpath 'faces-test';
 D_test = dir('faces-test/*.jpg');
 
@@ -33,7 +36,7 @@ M_test = [];
 [~, reindex] = sort(str2double(regexp({D_test.name}, '\d+', 'match', 'once')));
 D_test = D_test(reindex);
 for ID = 1:length(D_test)
-    D_test(ID).name;
+    D_test(ID).name
     im = rgb2gray(imread(D_test(ID).name)); % obličeje do šeda
     M_test = cat(2, M_test, im(:));   % dání obličejů do jedné matice
 end
@@ -52,11 +55,13 @@ test_space_norm = (test_space - mean(test_space(:))) / std(test_space(:));
 
 
 
-% Natrénování k-NN klasifikátoru
-knnClassifier = fitcknn(train_space_norm, (1:length(D_train))', 'NumNeighbors', 1);
-predictedClasses = predict(knnClassifier, test_space_norm);
 
-figure('Name','knn')
+
+% Natrénování ecoc klasifikátoru
+svm_classifier = fitcecoc(train_space_norm, group_indices');
+predictedClasses = predict(svm_classifier, test_space_norm);
+
+figure('Name','ecoc')
 
 j = 1;
 for i = 1:length(D_test)
@@ -66,13 +71,12 @@ for i = 1:length(D_test)
     
     j = j + 1;
     subplot(4, 2, j)
-    indx = predictedClasses(i);
+    predictedGroup = predictedClasses(i);
+    % Zobrazit nějaký obličej z přiřazené skupiny
+    indx = find(group_indices == predictedGroup, 1, 'first');
     prvotni_obrazek = fullfile('faces_cislo', [num2str(indx) '.jpg']);
     imshow(prvotni_obrazek)
     j = j + 1;
     
-    % Zobrazit nejbližší trénovací obličej
-    title(['Testovací obličej ' num2str(i) ' nejbližší trénovacímu obličeji ' num2str(indx)])
+    title(['Testovací obličej ' num2str(i) ' patří do skupiny ' num2str(predictedGroup)])
 end
-
-

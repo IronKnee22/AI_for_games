@@ -60,19 +60,20 @@ predictedClasses = predict(knnClassifier, test_space_norm);
 
 figure('Name','knn_konkretni')
 
-j = 1;
+
 for i = 1:length(D_test)
-    subplot(4, 2, j)
+    subplot(2,length(D_test), i)
     testovaci_obrazek = fullfile('faces-test', [num2str(i) '.jpg']);
     imshow(testovaci_obrazek)
     
-    j = j + 1;
-    subplot(4, 2, j)
+    
+    subplot(2,length(D_test), i+length(D_test))
     indx = predictedClasses(i);
     prvotni_obrazek = fullfile('faces_cislo', [num2str(indx) '.jpg']);
     imshow(prvotni_obrazek)
-    j = j + 1;
+    
     
     % Zobrazit nejbližší trénovací obličej
-    title(['Testovací obličej ' num2str(i) ' nejbližší trénovacímu obličeji ' num2str(indx)])
+    title([num2str(i) ' = ' num2str(indx)])
 end
+

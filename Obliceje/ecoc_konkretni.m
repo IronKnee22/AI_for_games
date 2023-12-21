@@ -1,6 +1,6 @@
-% Načtení trénovacích dat
 clear
-
+clc
+addpath 'pca_ica';
 addpath 'faces_cislo';
 D_train = dir('faces_cislo/*.jpg');
 
@@ -8,7 +8,7 @@ M_train = [];
 [~, reindex] = sort(str2double(regexp({D_train.name}, '\d+', 'match', 'once')));
 D_train = D_train(reindex);
 for ID = 1:length(D_train)
-    D_train(ID).name
+    D_train(ID).name;
     im = rgb2gray(imread(D_train(ID).name)); % obličeje do šeda
     M_train = cat(2, M_train, im(:));   % dání obličejů do jedné matice
 end
@@ -26,9 +26,6 @@ train_space = MStd_train * coef_train;
 
 % Načtení testovacích dat
 
-num_groups = length(D_train)/10;
-group_indices = ceil(((1:length(D_train)) / (length(D_train)) * num_groups));
-
 addpath 'faces-test';
 D_test = dir('faces-test/*.jpg');
 
@@ -36,7 +33,7 @@ M_test = [];
 [~, reindex] = sort(str2double(regexp({D_test.name}, '\d+', 'match', 'once')));
 D_test = D_test(reindex);
 for ID = 1:length(D_test)
-    D_test(ID).name
+    D_test(ID).name;
     im = rgb2gray(imread(D_test(ID).name)); % obličeje do šeda
     M_test = cat(2, M_test, im(:));   % dání obličejů do jedné matice
 end
@@ -57,11 +54,12 @@ test_space_norm = (test_space - mean(test_space(:))) / std(test_space(:));
 
 
 
-% Natrénování ecoc klasifikátoru
-ecoc_classifier = fitcecoc(train_space_norm, group_indices');
+% Natrénování k-NN klasifikátoru
+ecoc_classifier = fitcecoc(train_space_norm, (1:length(D_train))');
 predictedClasses = predict(ecoc_classifier, test_space_norm);
 
-figure('Name','ecoc-obecně')
+figure('Name','ecoc_konkretni')
+
 
 for i = 1:length(D_test)
     subplot(2,length(D_test), i)
@@ -70,17 +68,11 @@ for i = 1:length(D_test)
     
     
     subplot(2,length(D_test), i+length(D_test))
-    predictedGroup = predictedClasses(i);
-    % Zobrazit nějaký obličej z přiřazené skupiny
-    indx = find(group_indices == predictedGroup, 1, 'first');
+    indx = predictedClasses(i);
     prvotni_obrazek = fullfile('faces_cislo', [num2str(indx) '.jpg']);
     imshow(prvotni_obrazek)
     
     
-    title([num2str(i) ' = ' num2str(predictedGroup)])
+    % Zobrazit nejbližší trénovací obličej
+    title([num2str(i) ' = ' num2str(indx)])
 end
-
-correctGroups = [2, 7, 9, 10, 4, 18, 11]; 
-correctlyClassified = sum(predictedClasses' == correctGroups);
-accuracy = correctlyClassified / length(D_test);
-fprintf('Celková přesnost klasifikace: %.2f%%\n', accuracy * 100);

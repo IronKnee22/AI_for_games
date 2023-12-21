@@ -1,7 +1,7 @@
 clear
-close all
+clc
 
-
+addpath 'faces_cislo';
 D_train = dir('faces_cislo/*.jpg');
 
 M_train = [];
@@ -24,9 +24,9 @@ coef_train = pca(MStd_train);
 % Vytvoření prostoru hlavních komponent pro trénovací data
 train_space = MStd_train * coef_train;
 
-% Rozdělení trénovacích obličejů do skupin (např. 1-10, 11-20, ...)
+% Rozdělení trénovacích obličejů do skupin 
 num_groups = length(D_train)/10;
-group_indices = ceil((1:length(D_train)) / (length(D_train) / num_groups));
+group_indices = ceil(((1:length(D_train)) / (length(D_train)) * num_groups));
 
 % Načtení testovacích dat
 addpath 'faces-test';
@@ -59,20 +59,27 @@ predictedGroups = predict(knnClassifier, test_space_norm);
 
 figure('Name','knn')
 
-j = 1;
+
 for i = 1:length(D_test)
-    subplot(4, 2, j)
+    subplot(2,length(D_test), i)
     testovaci_obrazek = fullfile('faces-test', [num2str(i) '.jpg']);
     imshow(testovaci_obrazek)
     
-    j = j + 1;
-    subplot(4, 2, j)
+    
+    subplot(2,length(D_test), i+length(D_test))
     predictedGroup = predictedGroups(i);
     % Zobrazit nějaký obličej z přiřazené skupiny
     indx = find(group_indices == predictedGroup, 1, 'first');
     prvotni_obrazek = fullfile('faces_cislo', [num2str(indx) '.jpg']);
     imshow(prvotni_obrazek)
-    j = j + 1;
     
-    title(['Testovací obličej ' num2str(i) ' patří do skupiny ' num2str(predictedGroup)])
+    
+    title([num2str(i) ' =' num2str(predictedGroup)])
 end
+
+correctGroups = [2, 7, 9, 10, 4, 18, 11]; 
+correctlyClassified = sum(predictedGroups' == correctGroups);
+accuracy = correctlyClassified / (length(D_test));
+fprintf('Celková přesnost klasifikace: %.2f%%\n', accuracy * 100);
+
+

@@ -16,18 +16,19 @@ M = double(M');
 M_MEAN = mean(M(:));
 M_STD = std(M(:));
 MStd = (M-M_MEAN)/M_STD; % Normalizace
+coef = pca(MStd); % provede analýzu hlavních komponent
+KT = MStd* coef;
 %% Nepodstatné
 % 
 % Vykreslení 9 hlavních komponent
-coef = pca(MStd); % provede analýzu hlavních komponent 
+ 
 for k = 1:9
     subplot(3,3,k)
     imshow(reshape(coef(:,k),size(im))*100)
 end
 
-%%
+%% Vykresleni obličeju v 3D prostoru
 figure
-KT = MStd* coef;
 
 znak = {'r*','g*','b*','k*','y*','m*','c*','ro','go','bo','ko','yo','mo','co','rs','gs','bs','ks','ys','ms'};
 

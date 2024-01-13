@@ -5,6 +5,15 @@
 
 [přejít na k otázkám](Materialy/1.md)
 
-## Agenti, stavový prostor a prohledávání
+## 2. Agenti, stavový prostor a prohledávání
 
 [přejít na k otázkám](Materialy/2.md)
+
+## 3. Lokální prohledávání
+[přejít na k otázkám](Materialy/3.md)
+
+## 4. Hry pro dva hráče
+[přejít na k otázkám](Materialy/4.md)
+
+## 5. Strojové učení - příprava dat
+[přejít na k otázkám](Materialy/5.md)

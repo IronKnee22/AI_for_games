@@ -9,13 +9,15 @@
 [přejít na k otázkám](Materialy/2.md)
 
 ## 3. Lokální prohledávání
-**Horolezecká metoda**  
+**Horolezecká metoda, paprsky, simulované žíhaní, genetické algoritmy**  
 [přejít na k otázkám](Materialy/3.md)
 
 ## 4. Hry pro dva hráče
+**MiniMax, Nedokonalé strategie**  
 [přejít na k otázkám](Materialy/4.md)
 
 ## 5. Strojové učení - příprava dat
+**Základy stojového učení, Obecné schéma zpracování dat, předzupracování, Dobpředný výběr, zpětný výběr s využitím lineární rovnice, výběr příznaků pomocí genetických algoritmů, PCA, ICA**  
 [přejít na k otázkám](Materialy/5.md)
 
 ## 6. Regrese - stručně

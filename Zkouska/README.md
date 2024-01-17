@@ -33,10 +33,13 @@
 [přejít na k otázkám](Materialy/8.md)
 
 ## 9-12. Neuronové sítě
+**Umělá neuronová síť, Model neuronu, aktivační funkce,  perceptron, lineární klasifikátor, neuronová sít pro kladifikace, Proces učerní neuronových sítí, příprava dat, více vrstvá perceptronová síť, backpropagation, zpětné šíření chyby, ochrana proti předtrénování, Dopředná klasifikační neuronová síť pro více tříd, Rekurentní neuronová sít, konvoluční neuronové sítě** 
 [přejít na k otázkám](Materialy/9-12.md)
 
 ## 13. Zpětnovazebné učení - reinforcement learning
+**Reinforcment learning, typy RL, složení modelu zpětnovazebního učení, Markovovy řetězce, Bellmanova rovnice, Pasivní učení, přímý model, aktivní učení, hladový agent, q-učení**  
 [přejít na k otázkám](Materialy/13.md)
 
 ## 14. Expertní systémy
+**Součásti ES, charakteristiký rysy, typy úloh, diagnostické úlohy, data vs znalosti, Metody reprezentace znalostí, schématické sítě, rámce, tvrzení(tři typy), tvorba aplikace, tvorba ES, Získávání znalostí, Metoda repertoárové tabulky, Maticová analýza**  
 [přejít na k otázkám](Materialy/14.md)

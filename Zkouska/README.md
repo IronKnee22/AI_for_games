@@ -21,12 +21,15 @@
 [přejít na k otázkám](Materialy/5.md)
 
 ## 6. Regrese - stručně
+**Regrese, Regresní modely, Metoda nejmenších čeverců**  
 [přejít na k otázkám](Materialy/6.md)
 
 ## 7. Strojové učení -klasifikace
+**Klasifikace, klasifikátor, princip klasifikace, rozdělení algoritmů, klasifikace s učením, k-nn, bayesův klasifikátor, svm,klasifikační a regresní stromy, křížová validace, bootstrapping**  
 [přejít na k otázkám](Materialy/7.md)
 
 ## 8. Strojové učení - učení bez učitele
+**Shluková analýza, metody shlukové analýzy, k-means clustering, Hierachické slučování, ROC křivka, Hodnocení kvality klasifikace**  
 [přejít na k otázkám](Materialy/8.md)
 
 ## 9-12. Neuronové sítě
